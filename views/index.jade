@@ -1,0 +1,110 @@
+extends layout
+
+block content
+  div#ribbon-shadow
+    div#ribbon(width="28em")
+  div#canvas_cell
+    canvas#wysiwym(width="2000px", height="4000px")
+
+
+mixin distance(name, id, distance)
+  div(class="distance-input", id="#{name}-#{id}")
+    input(type="number", class="distance", id="#{name}-distance-#{id}", value="#{distance.distance}")
+    select(id="#{name}-unit-#{id}")
+      option(selected=(distance.unit == "pt")) pt
+      option(selected=(distance.unit == "in")) in
+      option(selected=(distance.unit == "in")) em
+
+
+mixin style_editor(id, font_size, margin_left, margin_right, margin_top, margin_bottom, padding_left,padding_right, padding_top, padding_bottom, text_indent, line_height, character_spacing, baseline_shift, vertical_scale, horizontal_scale)
+  div(id="style-editor", id="#{id}")
+    div(class="close-button")
+      X
+    input(type="text", class="dropdown edit block-type-identifier", id="block-type-#{id}",value="paragraph")
+    div(class="style-editor-body")
+      div(class="left-side")
+        canvas(class="small-sample", id="sample-for-#{id}")
+        div(class="font-row-one")
+          div(class="font-label")
+            | Font:
+          input(type="text", class="dropdown edit font-name", id="font-name-#{id}", name="font")
+          +distance("font-size", "#{id}", "#{font_size}")
+        div(class="font-row-two")
+          input(class="toggle-button bold", type="image", id="font-style-bold-#{id}", value="")
+          input(class="toggle-button italics", type="image", id="font-style-italics-#{id}", value="")
+          input(class="toggle-button underline", type="image", id="font-style-underline-#{id}", value="")
+          input(class="toggle-button allcaps", type="image", id="font-style-allcaps-#{id}", value="")
+          input(class="toggle-button smallcaps", type="image", id="font-style-smallcaps-#{id}", value="")
+          input(class="toggle-button strikethrough", type="image", id="font-style-strikethrough-#{id}", value="")
+          input(class="toggle-button subscript", type="image", id="font-style-subscript-#{id}", value="")
+          input(class="toggle-button superscript", type="image", id="font-style-superscript-#{id}", value="")
+          input(class="toggle-button ligatures", type="image", id="font-style-ligatures-#{id}", value="")
+      div(class="right-side")
+        div(class="four-sides-distances")
+          div(class="label") margin:
+          div(class="input-row")
+            +distance("margin-left", "#{id}", "#{margin_left}")
+            +distance("margin-right", "#{id}", "#{margin_right}")
+            +distance("margin-top", "#{id}", "#{margin_top}")
+            +distance("margin-bottom", "#{id}", "#{margin_bottom}")
+        div(class="four-sides-legend")
+          div(class="four-sides-legend-item")
+             | L 
+            img(src="four-sides-legend-icon-L")
+          div(class="four-sides-legend-item")
+            | R 
+          img(src="four-sides-legend-icon-R")
+          div(class="four-sides-legend-item")
+            | T 
+          img(src="four-sides-legend-icon-T")
+          div(class="four-sides-legend-item")
+            | B 
+          img(src="four-sides-legend-icon-B")
+      div(class="four-sides-distances")
+        div(class="label") padding:
+        div(class="input-row")
+          +distance("padding-left", "#{id}", "#{padding_left}")
+          +distance("padding-right", "#{id}", "#{padding_right}")
+          +distance("padding-top", "#{id}", "#{padding_top}")
+          +distance("padding-bottom", "#{id}", "#{padding_bottom}")
+      div(class="align-row right-side-row")
+        div(class="label") align:
+        input(class="image-button align-left", type="radio", name="align-#{id}", id="align-left-#{id}")
+        input(class="image-button align-center", type="radio", name="align-#{id}", id="align-center-#{id}")
+        input(class="image-button align-right", type="radio", name="align-#{id}", id="align-right-#{id}")
+        input(class="image-button align-justified", type="radio", name="align-#{id}", id="align-justified-#{id}")
+    div(class="indent-row right-side-row")
+      div(class="label") indent:
++distance("indent", "#{id}", "#{indent}")
+    div(class="bottom-section")
+      div(class="left-side")
+        div(class="line-height-row left-side-row")
+          div(class="label") line height:
+          +distance("line-height", "#{id}", "#{line_height}")
+        div(class="align-row left-side-row")
+          div(class="label") character spacing:
+          +distance("character-spacing", "#{id}", "#{character_spacing}")
+        div(class="baseline-shift-row left-side-row")
+          div(class="label") baseline shift:
+          +distance("baseline-shift", "#{id}", "#{baseline_shift}")
+      div(class="right-side")
+        div(class="vertical-scale-row right-side-row")
+          div(class="label row-label") vertical scale:
+          +distance("vertical-scale", "#{id}", "#{vertical_scale}")
+        div(class="horizontal-scale-row right-side-row")
+          div(class="label row-label") horizontal scale:
+          +distance("horizontal-scale", "#{id}", "#{horizontal_scale}")
+
+mixin theme_ribbon(theme)
+  div#theme-ribbon
+    div#theme-selector
+      | #{theme.name}
+    div#default-style(class="theme-style")
+       div(class="style-header")
+    div(class="theme-styles-headers")
+      | Styles
+      input(type="image", id="add-theme-style-button", value="+")
+    each key_value, i in theme.styles
+      div#default-style(class="theme-style")
+        div(class="style-header")
+          | #{key}
